@@ -1,0 +1,51 @@
+<!-- <app-cart-table
+  [items]="cartItems"
+  (remove)="onRemoveItem($event)"
+  (increase)="onIncreaseItem($event)"
+  (decrease)="onDecreaseItem($event)"
+></app-cart-table> -->
+
+<!-- <app-confirm-dialog
+  [message]="confirmMessage"
+  (confirm)="onConfirm()"
+  (cancel)="onCancel()"
+></app-confirm-dialog> -->
+
+<!-- <app-product-search
+  (search)="onSearch($event)"
+></app-product-search>
+
+<app-product-table
+  [products]="products"
+  (select)="onSelectProduct($event)"
+  (edit)="onEditProduct($event)"
+></app-product-table> -->
+
+<!-- <app-product-list /> -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Administrador de Inventario</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/sales/new" routerLinkActive="active">Nueva Venta</a>
+        </li>
+      </ul>
+    </div>
+    <!-- ...existing code... -->
+    <button class="btn btn-outline-light ms-2" (click)="toggleDarkMode()">
+      <i class="bi bi-moon"></i> Modo Oscuro
+    </button>
+    <!-- ...existing code... -->
+  </div>
+</nav>
+
+<router-outlet />

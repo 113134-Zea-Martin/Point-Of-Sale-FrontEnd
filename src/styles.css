@@ -1,0 +1,111 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-bg: #fff;
+  --color-text: #222;
+  --color-primary: #0d6efd;
+  /* ...otros colores... */
+}
+
+.dark-mode {
+  --color-bg: #181a1b;
+  --color-text: #f1f1f1;
+  --color-primary: #375a7f;
+  /* ...otros colores para modo oscuro... */
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.navbar {
+  background-color: var(--color-primary) !important;
+}
+
+.table {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+.table th,
+.table td {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.03); /* claro por defecto */
+}
+.dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.03); /* oscuro */
+}
+input,
+select,
+textarea {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-primary) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaa !important;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background-color: #23272b !important;
+  color: #f1f1f1 !important;
+  border-color: var(--color-primary) !important;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+  color: #888 !important;
+}
+
+.form-check-input {
+  background-color: var(--color-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.form-check-label {
+  color: var(--color-text) !important;
+}
+
+.dark-mode .form-check-input {
+  background-color: #23272b !important;
+  border-color: var(--color-primary) !important;
+}
+
+.dark-mode .form-check-label {
+  color: #f1f1f1 !important;
+}
+
+.modal-content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-primary) !important;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  border-bottom: 1px solid var(--color-primary) !important;
+  border-top: 1px solid var(--color-primary) !important;
+}
+
+.dark-mode .modal-content,
+.dark-mode .modal-header,
+.dark-mode .modal-footer {
+  background-color: #23272b !important;
+  color: #f1f1f1 !important;
+  border-color: var(--color-primary) !important;
+}

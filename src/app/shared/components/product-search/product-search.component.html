@@ -1,0 +1,5 @@
+<div class="input-group">
+  <input type="text" class="form-control" [(ngModel)]="query" (input)="onQueryChange(query)" (keyup.enter)="onEnter()"
+    placeholder="Buscar producto por nombre o código de barras..." autocomplete="off" />
+  <button class="btn btn-outline-secondary ms-2" type="button" (click)="onClear()">Limpiar</button>
+</div>

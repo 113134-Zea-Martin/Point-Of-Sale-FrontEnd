@@ -1,0 +1,85 @@
+<table class="table table-sm table-striped align-middle">
+  <thead>
+    <tr>
+      <th (click)="onSort('name')" style="cursor:pointer">
+        Producto
+        <span *ngIf="sortColumn === 'name'">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+      </th>
+      <th (click)="onSort('salePrice')" style="cursor:pointer">
+        Precio
+        <span *ngIf="sortColumn === 'salePrice'">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+      </th>
+      <th (click)="onSort('currentStock')" style="cursor:pointer">
+        Stock
+        <span *ngIf="sortColumn === 'currentStock'">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+      </th>
+      <th>
+        Estado
+      </th>
+      <th class="text-center">
+        Acciones
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngIf="products.length === 0 && !loading">
+      <td colspan="100%" class="text-center text-muted py-4">
+        <i class="bi bi-search"></i>
+        No se encontraron productos.
+      </td>
+    </tr>
+    <tr *ngFor="let product of pagedProducts">
+      <td>{{ product.name + " - " + product.brandName }}</td>
+      <td>{{ product.salePrice | money }}</td>
+      <td>{{ product.currentStock }}</td>
+      <td>
+        <app-stock-badge [current]="product.currentStock ?? 0" [minimum]="product.minimumStock"></app-stock-badge>
+      </td>
+      <td class="text-center">
+        <button class="btn btn-sm btn-outline-primary me-1"
+                (click)="onSelect(product)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Seleccionar producto">
+          <i class="bi bi-check2-circle"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary me-1"
+                (click)="onEdit(product)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Editar producto">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-success"
+                (click)="editStock.emit(product)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Editar stock">
+          <i class="bi bi-box-seam"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- <nav *ngIf="totalPages > 1" class="mt-2">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="page === 1">
+      <button class="page-link" (click)="setPage(page - 1)">Anterior</button>
+    </li>
+    <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index"
+        [class.active]="page === i + 1">
+      <button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button>
+    </li>
+    <li class="page-item" [class.disabled]="page === totalPages">
+      <button class="page-link" (click)="setPage(page + 1)">Siguiente</button>
+    </li>
+  </ul>
+</nav> -->
