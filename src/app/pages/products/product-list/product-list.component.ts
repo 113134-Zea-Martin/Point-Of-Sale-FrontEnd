@@ -53,6 +53,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
           this.page = res.number;
           this.totalPages = res.totalPages;
           this.totalElements = res.totalElements;
+
+
+          // Calcula métricas para las tarjetas de resumen
+          this.totalProducts = this.products.length;
+
+          // Stock crítico: productos con currentStock <= minimumStock
+          this.lowStockCount = this.products.filter(
+            p => (p.currentStock ?? 0) <= (p.minimumStock ?? 0)
+          ).length;
+
+          // Cantidad de categorías distintas
+          this.categoryCount = new Set(this.products.map(p => p.categoryName)).size;
+
         }
         this.loading = false;
       },
@@ -69,7 +82,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   goToPage(page: number) {
     if (page >= 0 && page < this.totalPages) {
-      this.loadProducts(page);
+      this.loadProducts({ page: page, size: this.size });
     }
   }
 
@@ -125,6 +138,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     // Recargar productos si es necesario
     this.loadProducts();
   }
-  // ...existing code...
+
+  totalProducts: number = 0;
+  lowStockCount: number = 0;
+  categoryCount: number = 0;
+
 
 }

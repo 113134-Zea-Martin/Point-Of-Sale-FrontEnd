@@ -8,22 +8,35 @@ export interface Sale {
 }
 
 export interface SaleResponse {
-
-//     {
-//   "dateTime": "2025-12-28 15:57:44",
-//   "total": 45,
-//   "paymentType": "CASH",
-//   "userId": 1,
-//   "saleDetails": [
-//     {
-//       "barcode": "000111222334",
-//       "quantity": 1
-//     }
-//   ]
-// }
     dateTime: string;
     total: number;
     paymentType: 'CASH' | 'CREDIT_CARD' | 'DEBIT_CARD' | 'MERCADO_PAGO';
     userId: number;
     saleDetails: SaleDetail[];
+}
+
+export interface SaleResponseWithNameDto {
+    dateTime: Date;
+    total: number;
+    paymentType: 'CASH' | 'CREDIT_CARD' | 'DEBIT_CARD' | 'MERCADO_PAGO';
+    userId: number;
+    saleDetailsNameDtoList: SaleDetailsNameDtoList[];
+}
+
+export interface SaleDetailsNameDtoList {
+    barcode: string;
+    name: string;
+    quantity: number;
+    salePrice: number;
+}
+
+export interface SaleRequestDto {
+    userId?: number;
+    paymentType?: 'CASH' | 'CREDIT_CARD' | 'DEBIT_CARD' | 'MERCADO_PAGO';
+    fromDate?: string;
+    toDate?: string;
+    maxTotal?: number;
+    page?: number;
+    size?: number;
+    sort?: string;
 }

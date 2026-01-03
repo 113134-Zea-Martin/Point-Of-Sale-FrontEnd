@@ -1,129 +1,146 @@
 <div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-<h2 class="mb-0">
-  <i class="bi"
-     [ngClass]="isEditMode ? 'bi-pencil-square text-warning' : (isDetailMode ? 'bi-eye text-info' : 'bi-plus-lg text-primary')"></i>
-  <ng-container *ngIf="isEditMode">
-    Editar: <span *ngIf="productName; else cargando">{{ productName }}</span>
-    <ng-template #cargando>Producto</ng-template>
-  </ng-container>
-  <ng-container *ngIf="isDetailMode">
-    Producto: <span *ngIf="productName; else cargando">{{ productName }}</span>
-    <ng-template #cargando>Producto</ng-template>
-  </ng-container>
-  <ng-container *ngIf="!isEditMode && !isDetailMode">
-    Nuevo Producto
-  </ng-container>
-</h2>
-    <a routerLink="/products" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left"></i> Volver
+
+  <!-- Encabezado destacado -->
+  <div class="bg-light border-bottom rounded-3 px-4 py-3 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center shadow-sm">
+    <div>
+      <h2 class="mb-1 fw-semibold">
+        <i class="bi"
+          [ngClass]="isEditMode ? 'bi-pencil-square text-warning' : (isDetailMode ? 'bi-eye text-info' : 'bi-plus-lg text-primary')"></i>
+        <ng-container *ngIf="isEditMode">
+          Editar: <span *ngIf="productName; else cargando">{{ productName }}</span>
+          <ng-template #cargando>Producto</ng-template>
+        </ng-container>
+        <ng-container *ngIf="isDetailMode">
+          Producto: <span *ngIf="productName; else cargando">{{ productName }}</span>
+          <ng-template #cargando>Producto</ng-template>
+        </ng-container>
+        <ng-container *ngIf="!isEditMode && !isDetailMode">
+          Nuevo Producto
+        </ng-container>
+      </h2>
+      <div class="text-muted fs-6">
+        <ng-container *ngIf="isEditMode">
+          Modifica los datos del producto y guarda los cambios.
+        </ng-container>
+        <ng-container *ngIf="isDetailMode">
+          Visualiza la información del producto.
+        </ng-container>
+        <ng-container *ngIf="!isEditMode && !isDetailMode">
+          Completa los datos para agregar un nuevo producto al inventario.
+        </ng-container>
+      </div>
+    </div>
+    <a routerLink="/products" class="btn btn-outline-secondary shadow-sm mt-3 mt-md-0 d-flex align-items-center gap-2">
+      <i class="bi bi-arrow-left"></i> <span>Volver</span>
     </a>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="name" class="form-label">Nombre</label>
-        <input type="text" id="name" class="form-control" formControlName="name" required>
-        <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-danger small">
-          El nombre es obligatorio.
+  <!-- Card del formulario -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" id="name" class="form-control" formControlName="name" required [readonly]="isDetailMode">
+            <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid" class="text-danger small">
+              El nombre es obligatorio.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="barcode" class="form-label">Código de barras</label>
+            <input type="text" id="barcode" class="form-control" formControlName="barcode" required [readonly]="isDetailMode">
+            <div *ngIf="form.get('barcode')?.touched && form.get('barcode')?.invalid" class="text-danger small">
+              El código de barras es obligatorio.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="brandId" class="form-label">Marca</label>
+            <div class="input-group">
+              <select id="brandId" class="form-select" formControlName="brandId" required [disabled]="isDetailMode">
+                <option [ngValue]="null">Seleccione una marca</option>
+                <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.name }}</option>
+              </select>
+              <button type="button" class="btn btn-outline-secondary" (click)="onAddBrand()" title="Agregar nueva marca" [disabled]="isDetailMode">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <div *ngIf="form.get('brandId')?.touched && form.get('brandId')?.invalid" class="text-danger small">
+              Debe seleccionar una marca.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="categoryId" class="form-label">Categoría</label>
+            <div class="input-group">
+              <select id="categoryId" class="form-select" formControlName="categoryId" required [disabled]="isDetailMode">
+                <option [ngValue]="null">Seleccione una categoría</option>
+                <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
+              </select>
+              <button type="button" class="btn btn-outline-secondary" (click)="onAddCategory()" title="Agregar nueva categoría" [disabled]="isDetailMode">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <div *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.invalid" class="text-danger small">
+              Debe seleccionar una categoría.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="purchasePrice" class="form-label">Precio de compra</label>
+            <input type="number" id="purchasePrice" class="form-control text-end" formControlName="purchasePrice"
+              step="0.01" min="0" [readonly]="isDetailMode">
+            <div *ngIf="form.get('purchasePrice')?.touched && form.get('purchasePrice')?.invalid" class="text-danger small">
+              <span *ngIf="form.get('purchasePrice')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="salePrice" class="form-label">Precio de venta</label>
+            <input type="number" id="salePrice" class="form-control text-end" formControlName="salePrice" step="0.01"
+              min="0" required [readonly]="isDetailMode">
+            <div *ngIf="form.get('salePrice')?.touched && form.get('salePrice')?.invalid" class="text-danger small">
+              <span *ngIf="form.get('salePrice')?.errors?.['required']">El precio de venta es obligatorio.</span>
+              <span *ngIf="form.get('salePrice')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="currentStock" class="form-label">Stock</label>
+            <input type="number" id="currentStock" class="form-control text-end" formControlName="currentStock" step="1"
+              min="0" [readonly]="true">
+            <div *ngIf="form.get('currentStock')?.touched && form.get('currentStock')?.invalid" class="text-danger small">
+              <span *ngIf="form.get('currentStock')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
+              <span *ngIf="form.get('currentStock')?.errors?.['pattern']">Debe ser un número entero.</span>
+              <span *ngIf="form.get('currentStock')?.errors?.['required']">El stock es obligatorio.</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="minimumStock" class="form-label">Stock mínimo</label>
+            <input type="number" id="minimumStock" class="form-control text-end" formControlName="minimumStock" step="1"
+              min="0" [readonly]="isDetailMode">
+            <div *ngIf="form.get('minimumStock')?.touched && form.get('minimumStock')?.invalid" class="text-danger small">
+              <span *ngIf="form.get('minimumStock')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
+              <span *ngIf="form.get('minimumStock')?.errors?.['pattern']">Debe ser un número entero.</span>
+              <span *ngIf="form.get('minimumStock')?.errors?.['required']">El stock mínimo es obligatorio.</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check form-switch mt-4">
+              <input class="form-check-input" type="checkbox" id="active" formControlName="active" [disabled]="isDetailMode">
+              <label class="form-check-label" for="active">
+                Producto activo
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="barcode" class="form-label">Código de barras</label>
-        <input type="text" id="barcode" class="form-control" formControlName="barcode" required>
-        <div *ngIf="form.get('barcode')?.touched && form.get('barcode')?.invalid" class="text-danger small">
-          El código de barras es obligatorio.
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="brandId" class="form-label">Marca</label>
-        <div class="input-group">
-          <select id="brandId" class="form-select" formControlName="brandId" required>
-            <option [ngValue]="null">Seleccione una marca</option>
-            <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.name }}</option>
-          </select>
-          <button type="button" class="btn btn-outline-secondary" (click)="onAddBrand()" title="Agregar nueva marca">
-            <i class="bi bi-plus-lg"></i>
+        <div class="mt-4">
+          <button *ngIf="form.enabled && !isDetailMode" type="submit" class="btn btn-primary px-4" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            Guardar
           </button>
         </div>
-        <div *ngIf="form.get('brandId')?.touched && form.get('brandId')?.invalid" class="text-danger small">
-          Debe seleccionar una marca.
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="categoryId" class="form-label">Categoría</label>
-        <div class="input-group">
-          <select id="categoryId" class="form-select" formControlName="categoryId" required>
-            <option [ngValue]="null">Seleccione una categoría</option>
-            <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
-          </select>
-          <button type="button" class="btn btn-outline-secondary" (click)="onAddCategory()"
-            title="Agregar nueva categoría">
-            <i class="bi bi-plus-lg"></i>
-          </button>
-        </div>
-        <div *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.invalid" class="text-danger small">
-          Debe seleccionar una categoría.
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="purchasePrice" class="form-label">Precio de compra</label>
-        <input type="number" id="purchasePrice" class="form-control text-end" formControlName="purchasePrice"
-          step="0.01" min="0">
-        <div *ngIf="form.get('purchasePrice')?.touched && form.get('purchasePrice')?.invalid" class="text-danger small">
-          <span *ngIf="form.get('purchasePrice')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
-          <!-- <span *ngIf="form.get('purchasePrice')?.errors?.['pattern']">Máximo dos decimales permitidos.</span> -->
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="salePrice" class="form-label">Precio de venta</label>
-        <input type="number" id="salePrice" class="form-control text-end" formControlName="salePrice" step="0.01"
-          min="0" required>
-        <div *ngIf="form.get('salePrice')?.touched && form.get('salePrice')?.invalid" class="text-danger small">
-          <span *ngIf="form.get('salePrice')?.errors?.['required']">El precio de venta es obligatorio.</span>
-          <span *ngIf="form.get('salePrice')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
-          <!-- <span *ngIf="form.get('salePrice')?.errors?.['pattern']">Máximo dos decimales permitidos.</span> -->
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="currentStock" class="form-label">Stock</label>
-        <input type="number" id="currentStock" class="form-control text-end" formControlName="currentStock" step="1"
-          min="0">
-        <div *ngIf="form.get('currentStock')?.touched && form.get('currentStock')?.invalid" class="text-danger small">
-          <span *ngIf="form.get('currentStock')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
-          <span *ngIf="form.get('currentStock')?.errors?.['pattern']">Debe ser un número entero.</span>
-          <span *ngIf="form.get('currentStock')?.errors?.['required']">El stock es obligatorio.</span>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="minimumStock" class="form-label">Stock mínimo</label>
-        <input type="number" id="minimumStock" class="form-control text-end" formControlName="minimumStock" step="1"
-          min="0">
-        <div *ngIf="form.get('minimumStock')?.touched && form.get('minimumStock')?.invalid" class="text-danger small">
-          <span *ngIf="form.get('minimumStock')?.errors?.['min']">Debe ser mayor o igual a 0.</span>
-          <span *ngIf="form.get('minimumStock')?.errors?.['pattern']">Debe ser un número entero.</span>
-          <span *ngIf="form.get('minimumStock')?.errors?.['required']">El stock mínimo es obligatorio.</span>
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-3">
-        <div class="form-check form-switch mt-4">
-          <input class="form-check-input" type="checkbox" id="active" formControlName="active">
-          <label class="form-check-label" for="active">
-            Producto activo
-          </label>
-        </div>
-      </div>
-
+      </form>
     </div>
-    <button *ngIf="form.enabled" type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-      Guardar
-    </button>
-  </form>
-</div>
+  </div>
 
-<app-new-brand-category [type]="modalType" [show]="showModal" (created)="onBrandOrCategoryCreated($event)"
-  (closed)="showModal = false">
-</app-new-brand-category>
+  <app-new-brand-category [type]="modalType" [show]="showModal" (created)="onBrandOrCategoryCreated($event)"
+    (closed)="showModal = false">
+  </app-new-brand-category>
+</div>

@@ -51,7 +51,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       categoryId: [null, Validators.required],
       purchasePrice: [null, [Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
       salePrice: [null, [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-    currentStock: [{ value: 0, disabled: true }, [Validators.min(0), Validators.pattern(/^\d+$/), Validators.required]],
+      currentStock: [{ value: 0, disabled: true }, [Validators.min(0), Validators.pattern(/^\d+$/), Validators.required]],
       minimumStock: [null, [Validators.min(0), Validators.pattern(/^\d+$/), Validators.required]],
       active: [true]
     });
@@ -149,39 +149,39 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     this.suscriptions.forEach(sus => sus.unsubscribe());
   }
 
-onSubmit() {
-  if (this.form.invalid) return;
-  this.loading = true;
+  onSubmit() {
+    if (this.form.invalid) return;
+    this.loading = true;
 
-  let obs$;
-  if (this.isEditMode && this.productId) {
-    // Modo edición: actualizar producto
-    const updateData = {
-      ...this.form.getRawValue(),
-      currentStock: this.form.getRawValue().currentStock
-    };
-    delete updateData.initialStock; // Por si acaso
-    obs$ = this.productService.updateProduct(this.productId, updateData);
-  } else {
-    // Modo creación: crear producto
-    const createData: ProductCreateDTO = {
-      ...this.form.getRawValue(),
-      initialStock: 0 // Siempre 0
-    };
-    delete createData.currentStock;
-    delete createData.active;
-    obs$ = this.productService.createProduct(createData);
+    let obs$;
+    if (this.isEditMode && this.productId) {
+      // Modo edición: actualizar producto
+      const updateData = {
+        ...this.form.getRawValue(),
+        currentStock: this.form.getRawValue().currentStock
+      };
+      delete updateData.initialStock; // Por si acaso
+      obs$ = this.productService.updateProduct(this.productId, updateData);
+    } else {
+      // Modo creación: crear producto
+      const createData: ProductCreateDTO = {
+        ...this.form.getRawValue(),
+        initialStock: 0 // Siempre 0
+      };
+      delete createData.currentStock;
+      delete createData.active;
+      obs$ = this.productService.createProduct(createData);
+    }
+
+    const sus = obs$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.router.navigate(['/products']);
+      },
+      error: () => { this.loading = false; }
+    });
+    this.suscriptions.push(sus);
   }
-
-  const sus = obs$.subscribe({
-    next: () => {
-      this.loading = false;
-      this.router.navigate(['/products']);
-    },
-    error: () => { this.loading = false; }
-  });
-  this.suscriptions.push(sus);
-}
 
   modalType: 'brand' | 'category' = 'brand';
   showModal = false;

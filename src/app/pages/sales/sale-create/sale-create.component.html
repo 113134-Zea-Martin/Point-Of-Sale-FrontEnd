@@ -1,36 +1,63 @@
 <div class="container my-4">
-  <h2 class="mb-3">
-    <i class="bi bi-cart-plus text-primary"></i> Nueva Venta
-  </h2>
 
-  <app-product-search (select)="onProductSelected($event)"></app-product-search>
-
-  <app-cart-table
-    [items]="cartItems"
-    (increase)="onIncrease($event)"
-    (decrease)="onDecrease($event)"
-    (remove)="onRemove($event)"
-    (quantityChange)="onQuantityChange($event)">
-  </app-cart-table>
-
-  <div class="row mt-3">
-    <div class="col-md-6">
-      <label class="form-label">Método de pago</label>
-      <select class="form-select" [(ngModel)]="paymentType">
-        <option value="CASH">Efectivo</option>
-        <option value="CREDIT_CARD">Tarjeta de crédito</option>
-        <option value="DEBIT_CARD">Tarjeta de débito</option>
-        <option value="MERCADO_PAGO">Mercado Pago</option>
-      </select>
+  <!-- Encabezado destacado -->
+  <div class="bg-light border-bottom rounded-3 px-4 py-3 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center shadow-sm">
+    <div>
+      <h2 class="mb-1 fw-semibold">
+        <i class="bi bi-cart-plus text-primary me-2"></i> Nueva Venta
+      </h2>
+      <div class="text-muted fs-6">
+        Selecciona productos, ajusta cantidades y finaliza la venta.
+      </div>
     </div>
-    <div class="col-md-6 text-end">
-      <div class="fw-bold fs-5 mb-2">Total: ${{ total }}</div>
-      <button class="btn btn-success" [disabled]="cartItems.length === 0 || loading" (click)="finalizarVenta()">
-        Finalizar venta
-      </button>
+    <a routerLink="/sales" class="btn btn-outline-secondary shadow-sm mt-3 mt-md-0 d-flex align-items-center gap-2">
+      <i class="bi bi-arrow-left"></i> <span>Volver</span>
+    </a>
+  </div>
+
+  <!-- Card principal con búsqueda y carrito -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white border-bottom-0 pb-2">
+      <app-product-search (select)="onProductSelected($event)"></app-product-search>
+    </div>
+    <div class="card-body p-0">
+      <app-cart-table
+        [items]="cartItems"
+        (increase)="onIncrease($event)"
+        (decrease)="onDecrease($event)"
+        (remove)="onRemove($event)"
+        (quantityChange)="onQuantityChange($event)">
+      </app-cart-table>
     </div>
   </div>
 
+  <!-- Métodos de pago y total -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <div class="row align-items-end">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <label class="form-label">Método de pago</label>
+          <select class="form-select" [(ngModel)]="paymentType">
+            <option value="CASH">Efectivo</option>
+            <option value="CREDIT_CARD">Tarjeta de crédito</option>
+            <option value="DEBIT_CARD">Tarjeta de débito</option>
+            <option value="MERCADO_PAGO">Mercado Pago</option>
+          </select>
+        </div>
+        <div class="col-md-6 text-end">
+          <div class="fw-bold fs-4 mb-2">Total: ${{ total }}</div>
+          <button class="btn btn-success shadow-sm px-4"
+            [disabled]="cartItems.length === 0 || loading"
+            (click)="finalizarVenta()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            Finalizar venta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensajes de éxito y error -->
   <div *ngIf="successMsg" class="alert alert-success mt-3">{{ successMsg }}</div>
   <div *ngIf="errorMsg" class="alert alert-danger mt-3">{{ errorMsg }}</div>
 </div>

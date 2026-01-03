@@ -1,16 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
-:root {
+/* :root {
   --color-bg: #fff;
   --color-text: #222;
   --color-primary: #0d6efd;
-  /* ...otros colores... */
 }
 
 .dark-mode {
   --color-bg: #181a1b;
   --color-text: #f1f1f1;
   --color-primary: #375a7f;
-  /* ...otros colores para modo oscuro... */
 }
 
 body {
@@ -34,10 +31,10 @@ body {
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.03); /* claro por defecto */
+  background-color: rgba(0, 0, 0, 0.03); 
 }
 .dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: rgba(255, 255, 255, 0.03); /* oscuro */
+  background-color: rgba(255, 255, 255, 0.03);
 }
 input,
 select,
@@ -108,4 +105,4 @@ textarea::placeholder {
   background-color: #23272b !important;
   color: #f1f1f1 !important;
   border-color: var(--color-primary) !important;
-}
+} */
